@@ -56,6 +56,7 @@ function App() {
 			<Room />
 			<Comment />
 			<FileArea />
+			{rooms && Array.isArray(rooms) && rooms.map(item => item.ID)}
 		</div>
 	);
 }
