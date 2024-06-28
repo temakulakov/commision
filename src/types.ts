@@ -1,0 +1,26 @@
+export const Juravl = ['UF_CRM_1719568046'];
+export const Nest = [
+	'UF_CRM_1719568072',
+	'UF_CRM_1719568104',
+	'UF_CRM_1719568127',
+	'UF_CRM_1719568145',
+	'UF_CRM_1719568179',
+	'UF_CRM_1719568198',
+	'UF_CRM_1719568213',
+];
+export const Susl = ['UF_CRM_1719568232', 'UF_CRM_1719568249'];
+export const Kos = [
+	'UF_CRM_1719568266',
+	'UF_CRM_1719568282',
+	'UF_CRM_1719568304',
+];
+export const Gol = [
+	'UF_CRM_1719568360',
+	'UF_CRM_1719568377',
+	'UF_CRM_1719568387',
+	'UF_CRM_1719568405',
+	'UF_CRM_1719568439',
+	'UF_CRM_1719568490',
+];
+export const Plaks = ['UF_CRM_1719568508', 'UF_CRM_1719568528'];
+export const Yakov = ['UF_CRM_1719568686'];
