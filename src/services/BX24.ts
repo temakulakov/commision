@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {
+	ApiResponse,
 	Gol,
+	IUserField,
 	Juravl,
 	Kos,
 	Nest,
@@ -13,39 +15,45 @@ import {
 
 const BASE_URL = 'https://intranet.gctm.ru/rest/1552/589nuaiewuwmtnb1/';
 
-export const fetchRooms = async (level: string) => {
-	const response = await axios.post<Room[]>(BASE_URL + 'crm.deal.list', {
-		filter: {
-			STAGE_ID: level,
-			CATEGORY_ID: 15,
-		},
-		order: {
-			TITLE: 'ASC',
-		},
-		select: [
-			...Juravl,
-			...Nest,
-			...Susl,
-			...Kos,
-			...Gol,
-			...Plaks,
-			...Yakov,
-			'TITLE',
-		],
-	});
-	return response.data;
+export const fetchRooms = async (level?: string) => {
+	const response = await axios.post<ApiResponse<Room[]>>(
+		BASE_URL + 'crm.deal.list',
+		{
+			filter: {
+				STAGE_ID: level,
+				CATEGORY_ID: 15,
+			},
+			order: {
+				TITLE: 'ASC',
+			},
+			select: [
+				...Juravl,
+				...Nest,
+				...Susl,
+				...Kos,
+				...Gol,
+				...Plaks,
+				...Yakov,
+				'TITLE',
+			],
+		}
+	);
+	return response.data.result;
 };
 
 export const fetchCurrentRoom = async (title: string, level: string) => {
-	const response = await axios.post<Room>(BASE_URL + 'crm.deal.list', {
-		filter: {
-			STAGE_ID: level,
-			CATEGORY_ID: 15, // Убедитесь, что CATEGORY_ID указан как число, не строка
-			TITLE: title,
-		},
-		select: [...Juravl, 'TITLE'],
-	});
-	return response.data;
+	const response = await axios.post<ApiResponse<Room>>(
+		BASE_URL + 'crm.deal.list',
+		{
+			filter: {
+				STAGE_ID: level,
+				CATEGORY_ID: 15, // Убедитесь, что CATEGORY_ID указан как число, не строка
+				TITLE: title,
+			},
+			select: [...Juravl, 'TITLE'],
+		}
+	);
+	return response.data.result;
 };
 
 interface Pro {
@@ -59,8 +67,8 @@ interface ResultFields {
 	value: string;
 }
 
-export const fetchUserFields = async () => {
-	const response = await axios.post<UserField[]>(
+export const fetchUserFields = async (): Promise<IUserField[]> => {
+	const response = await axios.post<ApiResponse<UserField[]>>(
 		BASE_URL + 'crm.deal.userfield.list',
 		{
 			filter: {
@@ -68,7 +76,9 @@ export const fetchUserFields = async () => {
 			},
 		}
 	);
-	return response.data.map(item => ({
+
+	// Преобразуем данные в нужный формат
+	return response.data.result.map(item => ({
 		id: item.FIELD_NAME,
 		value: item.SETTINGS.LABEL_CHECKBOX,
 	}));

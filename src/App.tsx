@@ -1,12 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from './App.module.scss';
 import { Comment } from './components/Comment/Comment';
 import { FileArea } from './components/FileArea/FileArea';
 import { Level } from './components/Level/Level';
 import { Room } from './components/Room/Room';
+import { Rooms } from './components/Rooms/Rooms';
 import { User } from './components/User/User';
 import { fetchCurrentRoom, fetchRooms, fetchUserFields } from './services/BX24';
+import { Room as IRoom, IUserField } from './types'; // Импортируйте интерфейс IUserField
 
 const StagesID = [
 	'',
@@ -17,21 +21,32 @@ const StagesID = [
 ];
 
 function App() {
-	const [description, setDescription] = React.useState<string>('');
-
-	const [level, setLevel] = React.useState<number>(0);
+	const { userId } = useParams<{ userId: string }>();
+	const userIdNumber = Number(userId);
+	console.log(userIdNumber);
+	const [user, setUser] = useState<number>(0);
+	const [description, setDescription] = useState<string>('');
+	const [level, setLevel] = useState<number>(0);
+	const [selectedRoom, setSelectedRoom] = useState<IRoom | undefined>(
+		undefined
+	);
 
 	const {
 		data: userFields,
 		isLoading: isLoadingUserFields,
 		error: errorUserFields,
-	} = useQuery({ queryKey: ['userFields'], queryFn: fetchUserFields });
+	} = useQuery<IUserField[]>({
+		queryKey: ['userFields'],
+		queryFn: fetchUserFields,
+	});
+
+	console.log(userFields);
 
 	const {
 		data: rooms,
 		isLoading: isLoadingRooms,
 		error: errorRooms,
-	} = useQuery({
+	} = useQuery<IRoom[]>({
 		queryKey: ['rooms', StagesID[level]],
 		queryFn: () => fetchRooms(StagesID[level]),
 	});
@@ -40,7 +55,7 @@ function App() {
 		data: room,
 		isLoading: isLoadingRoom,
 		error: errorRoom,
-	} = useQuery({
+	} = useQuery<IRoom>({
 		queryKey: ['room'],
 		queryFn: () => fetchCurrentRoom(description, StagesID[level]),
 	});
@@ -52,11 +67,32 @@ function App() {
 	return (
 		<div className={styles.root}>
 			<User />
+
 			<Level level={level} handleChange={handleChangeLevel} />
-			<Room />
-			<Comment />
+			<AnimatePresence>
+				{rooms && <Rooms rooms={rooms} setRoom={setSelectedRoom} />}
+			</AnimatePresence>
+			<AnimatePresence>
+				{selectedRoom && userFields && (
+					<motion.div
+						key={selectedRoom.ID}
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: 20 }}
+					>
+						<Room
+							room={selectedRoom}
+							userFields={userFields}
+							user={userIdNumber}
+						/>
+					</motion.div>
+				)}
+			</AnimatePresence>
+			<AnimatePresence>
+				<Comment />
+			</AnimatePresence>
+
 			<FileArea />
-			{rooms && Array.isArray(rooms) && rooms.map(item => item.ID)}
 		</div>
 	);
 }

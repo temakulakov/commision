@@ -74,3 +74,21 @@ export interface Room {
 	UF_CRM_1719568528: string | null;
 	UF_CRM_1719568686: string | null;
 }
+
+export interface IUserField {
+	id: string;
+	value: string;
+}
+
+export interface ApiResponse<T> {
+	result: T;
+	total: number;
+	time: {
+		start: number;
+		finish: number;
+		duration: number;
+		processing: number;
+		date_start: string;
+		date_finish: string;
+	};
+}

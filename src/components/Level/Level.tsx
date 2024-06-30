@@ -1,4 +1,4 @@
-import { AutoComplete } from 'antd';
+import { Select } from 'antd';
 import React from 'react';
 import styles from './Level.module.scss';
 
@@ -15,12 +15,12 @@ const levelOptions = [
 ];
 
 export const Level = ({ level, handleChange }: Props) => {
-	const [options, setOptions] = React.useState<{ value: string }[]>([]);
+	const [options, setOptions] = React.useState(levelOptions);
 
 	const getPanelValue = (text: string) => {
-		return levelOptions
-			.filter(option => option.value.toLowerCase().includes(text.toLowerCase()))
-			.map(option => ({ value: option.value }));
+		return levelOptions.filter(option =>
+			option.value.toLowerCase().includes(text.toLowerCase())
+		);
 	};
 
 	const onSelect = (value: string) => {
@@ -32,13 +32,21 @@ export const Level = ({ level, handleChange }: Props) => {
 
 	return (
 		<div className={styles.root}>
-			<AutoComplete
-				options={options}
+			<Select
+				showSearch
 				style={{ width: 200 }}
-				onSelect={onSelect}
-				onSearch={text => setOptions(getPanelValue(text))}
 				placeholder='input here'
-			/>
+				optionFilterProp='children'
+				onChange={onSelect}
+				onSearch={text => setOptions(getPanelValue(text))}
+				filterOption={false}
+			>
+				{options.map(option => (
+					<Select.Option key={option.id} value={option.value}>
+						{option.value}
+					</Select.Option>
+				))}
+			</Select>
 		</div>
 	);
 };
