@@ -35,7 +35,7 @@ export const Level = ({ level, handleChange }: Props) => {
 			<Select
 				showSearch
 				style={{ width: '100%' }}
-				placeholder='input here'
+				placeholder='Выберите этаж'
 				optionFilterProp='children'
 				onChange={onSelect}
 				onSearch={text => setOptions(getPanelValue(text))}
