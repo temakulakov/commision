@@ -34,7 +34,7 @@ export const Level = ({ level, handleChange }: Props) => {
 		<div className={styles.root}>
 			<Select
 				showSearch
-				style={{ width: 200 }}
+				style={{ width: '100%' }}
 				placeholder='input here'
 				optionFilterProp='children'
 				onChange={onSelect}

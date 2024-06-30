@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
+
 import { useParams } from 'react-router-dom';
 import styles from './App.module.scss';
 import { Comment } from './components/Comment/Comment';

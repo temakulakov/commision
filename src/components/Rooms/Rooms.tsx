@@ -18,7 +18,7 @@ export const Rooms = ({ rooms, setRoom }: Props) => {
 			{rooms && rooms.length > 0 && (
 				<Select
 					showSearch
-					style={{ width: 200 }}
+					style={{ width: '100%' }}
 					placeholder='Select a room'
 					onChange={handleSelectRoom}
 				>
