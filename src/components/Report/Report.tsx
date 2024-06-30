@@ -95,7 +95,7 @@ export const Report = () => {
 						const dataSource = Object.keys(room).map(key => ({
 							key,
 							field: fieldNames[key] || key,
-							value: room[key as keyof IRoom] ?? 'N/A',
+							value: room[key as keyof IRoom] ?? 'Замечаний пока нет',
 						}));
 						return (
 							<motion.div
