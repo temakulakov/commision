@@ -68,7 +68,13 @@ function App() {
 	return (
 		<div className={styles.root}>
 			<User />
-
+			<h1>Замечания по приемке</h1>
+			{userIdNumber === 1669 && <h3>Головко Владимир Михайлович</h3>}
+			{userIdNumber === 1462 && <h3>Журавлева Виктория Львовна</h3>}
+			{userIdNumber === 1873 && <h3>Суслова Ольга Алексеевна</h3>}
+			{userIdNumber === 1741 && <h3>Косырев Игорь Юрьевич</h3>}
+			{userIdNumber === 1460 && <h3>Плаксун Василий Васильевич</h3>}
+			{userIdNumber === 1460 && <h3>Яковлева Наталья Николаевна</h3>}
 			<Level level={level} handleChange={handleChangeLevel} />
 			<AnimatePresence>
 				{rooms && <Rooms rooms={rooms} setRoom={setSelectedRoom} />}
