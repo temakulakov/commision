@@ -84,6 +84,7 @@ export const Report = () => {
 
 	return (
 		<div className={styles.root}>
+			<h1>Комиссия по приемке помещений</h1>
 			<Level level={level} handleChange={handleChangeLevel} />
 			{isLoadingRooms && <div>Загрузка комнат...</div>}
 			{errorRooms && (

@@ -10,8 +10,8 @@ import { Level } from './components/Level/Level';
 import { Room } from './components/Room/Room';
 import { Rooms } from './components/Rooms/Rooms';
 import { User } from './components/User/User';
-import { fetchCurrentRoom, fetchRooms, fetchUserFields } from './services/BX24';
-import { Room as IRoom, IUserField } from './types'; // Импортируйте интерфейс IUserField
+import { fetchCurrentRoom, fetchRooms } from './services/BX24';
+import { Room as IRoom } from './types'; // Импортируйте интерфейс IUserField
 
 const StagesID = [
 	'',
@@ -24,7 +24,7 @@ const StagesID = [
 function App() {
 	const { userId } = useParams<{ userId: string }>();
 	const userIdNumber = Number(userId);
-	console.log(userIdNumber);
+
 	const [user, setUser] = useState<number>(0);
 	const [description, setDescription] = useState<string>('');
 	const [level, setLevel] = useState<number>(0);
@@ -32,16 +32,10 @@ function App() {
 		undefined
 	);
 
-	const {
-		data: userFields,
-		isLoading: isLoadingUserFields,
-		error: errorUserFields,
-	} = useQuery<IUserField[]>({
-		queryKey: ['userFields'],
-		queryFn: fetchUserFields,
-	});
-
-	console.log(userFields);
+	// const files = getAllFiles();
+	// useEffect(() => {
+	// 	console.log(files)
+	// }, [files]);
 
 	const {
 		data: rooms,
@@ -80,18 +74,14 @@ function App() {
 				{rooms && <Rooms rooms={rooms} setRoom={setSelectedRoom} />}
 			</AnimatePresence>
 			<AnimatePresence>
-				{selectedRoom && userFields && (
+				{selectedRoom && (
 					<motion.div
 						key={selectedRoom.ID}
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: 20 }}
 					>
-						<Room
-							room={selectedRoom}
-							userFields={userFields}
-							user={userIdNumber}
-						/>
+						<Room room={selectedRoom} user={userIdNumber} />
 					</motion.div>
 				)}
 			</AnimatePresence>

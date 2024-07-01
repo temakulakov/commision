@@ -92,3 +92,8 @@ export interface ApiResponse<T> {
 		date_finish: string;
 	};
 }
+export interface IFile {
+	id: string;
+	name: string;
+	// Другие поля файла...
+}
