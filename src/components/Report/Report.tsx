@@ -131,7 +131,7 @@ export const Report = () => {
 									rel='noopener noreferrer'
 									style={{ display: 'block' }}
 									onClick={e => {
-										e.preventDefault();
+										// e.preventDefault();
 									}}
 								>
 									{file.NAME}

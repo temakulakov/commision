@@ -160,27 +160,26 @@ export const Room = ({ room, user }: Props) => {
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState('');
+	const loadFiles = async () => {
+		try {
+			const files = await getAllFiles();
+			setFileList(
+				files
+					.filter(item => item.NAME.split('-')[0] === String(room.ID))
+					.map(file => ({
+						uid: file.ID,
+						name: file.NAME,
+						status: 'done',
+						url: file.DOWNLOAD_URL,
+					}))
+			);
+		} catch (error) {
+			message.error('Error loading files');
+		}
+	};
 
 	// Загружаем файлы при монтировании компонента
 	useEffect(() => {
-		const loadFiles = async () => {
-			try {
-				const files = await getAllFiles();
-				setFileList(
-					files
-						.filter(item => item.NAME.split('-')[0] === String(room.ID))
-						.map(file => ({
-							uid: file.ID,
-							name: file.NAME,
-							status: 'done',
-							url: file.DOWNLOAD_URL,
-						}))
-				);
-			} catch (error) {
-				message.error('Error loading files');
-			}
-		};
-
 		loadFiles();
 	}, []);
 
@@ -239,9 +238,11 @@ export const Room = ({ room, user }: Props) => {
 							);
 							const renamedFile = renameFile(
 								file,
-								`${room.ID}-UF_CRM_1719568046--${file.name}`
+								`${room.ID}-UF_CRM_1719568046-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
+							setFileList(prev => [...prev]);
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -288,6 +289,9 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568072-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
+							// setFileList(prev => [...prev, {}]);
+
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -330,6 +334,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568104-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -372,6 +377,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568127-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -414,6 +420,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568145-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -458,6 +465,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568179-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -500,6 +508,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568198-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -542,6 +551,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568213-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -588,6 +598,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568232-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -630,6 +641,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568249-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -676,6 +688,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568266-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -718,6 +731,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568282-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -760,6 +774,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568304-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -806,6 +821,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568360--${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -848,6 +864,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568377-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -890,6 +907,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568387-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -932,6 +950,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568405-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -974,6 +993,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568439-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -1016,6 +1036,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568490-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -1062,6 +1083,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568508-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -1104,6 +1126,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568528-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
@@ -1150,6 +1173,7 @@ export const Room = ({ room, user }: Props) => {
 								`${room.ID}-UF_CRM_1719568686-${file.name}`
 							);
 							await uploadFile(uploadUrl, renamedFile);
+							loadFiles();
 							return false; // Prevent the default upload behavior since we handle it manually
 						}}
 					>
