@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { Table } from 'antd';
+import { Table, message } from 'antd';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
-import { fetchRooms } from '../../services/BX24';
+import { useEffect, useState } from 'react';
+import { fetchRooms, getAllFiles } from '../../services/BX24';
 import { Room as IRoom } from '../../types';
 import { Level } from '../Level/Level';
 import styles from './Report.module.scss';
@@ -52,8 +52,23 @@ const fieldNames: { [key: string]: string } = {
 		'Яковлева Н.Н. - благоустройства и ландшафтного оформления территории.',
 };
 
+interface IFile {
+	ID: string;
+	NAME: string;
+	DOWNLOAD_URL: string;
+	DETAIL_URL: string;
+	// добавьте другие поля, которые вам нужны
+}
+
+interface DataSourceRecord {
+	key: string;
+	field: string;
+	value: string;
+}
+
 export const Report = () => {
 	const [level, setLevel] = useState<number>(0);
+	const [fileList, setFileList] = useState<IFile[]>([]);
 
 	const handleChangeLevel = (id: number) => {
 		setLevel(id);
@@ -68,17 +83,65 @@ export const Report = () => {
 		queryFn: () => fetchRooms(StagesID[level]),
 	});
 
+	useEffect(() => {
+		const loadFiles = async () => {
+			try {
+				const files = await getAllFiles();
+				setFileList(files);
+			} catch (error) {
+				message.error('Ошибка при загрузке файлов');
+			}
+		};
+
+		loadFiles();
+	}, []);
+
 	const columns = [
 		{
 			title: 'Поле',
 			dataIndex: 'field',
 			key: 'field',
 			width: 250,
+			render: (text: string) => fieldNames[text] || text,
 		},
 		{
 			title: 'Значение',
 			dataIndex: 'value',
 			key: 'value',
+		},
+		{
+			title: 'Файлы',
+			dataIndex: 'files',
+			key: 'files',
+			render: (_: any, record: DataSourceRecord) => {
+				const roomID = record.key;
+				const fieldName = record.field;
+				return fileList.length > 0 ? (
+					<ul>
+						{fileList
+							.filter(file => {
+								const [id, field] = file.NAME.split('-');
+								return id === String(roomID) && field === String(fieldName);
+							})
+							.map(file => (
+								<a
+									key={file.ID}
+									href={file.DOWNLOAD_URL}
+									target='_blank'
+									rel='noopener noreferrer'
+									style={{ display: 'block' }}
+									onClick={e => {
+										e.preventDefault();
+									}}
+								>
+									{file.NAME}
+								</a>
+							))}
+					</ul>
+				) : (
+					'Нет файлов'
+				);
+			},
 		},
 	];
 
@@ -94,8 +157,8 @@ export const Report = () => {
 				{rooms &&
 					rooms.map(room => {
 						const dataSource = Object.keys(room).map(key => ({
-							key,
-							field: fieldNames[key] || key,
+							key: room.ID, // room.ID для фильтрации
+							field: key,
 							value: room[key as keyof IRoom] ?? 'Замечаний пока нет',
 						}));
 						return (

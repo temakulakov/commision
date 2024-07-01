@@ -93,6 +93,7 @@ interface IFile {
 	ID: string;
 	NAME: string;
 	DOWNLOAD_URL: string;
+	DETAIL_URL: string;
 	// добавьте другие поля, которые вам нужны
 }
 
